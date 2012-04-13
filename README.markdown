@@ -20,15 +20,15 @@ To use it, add it to your Gemfile:
 
 If you would like to remove unused tag objects after removing taggings, add
 
-  ActsAsTaggable.remove_unused_tags = true
+    ActsAsTaggable.remove_unused_tags = true
 
 If you want force tags to be saved downcased:
 
-  ActsAsTaggable.force_lowercase = true
+    ActsAsTaggable.force_lowercase = true
 
 If you want tags to be saved parametrized (you can redefine to_param as well):
 
-  ActsAsTaggable.force_parameterize = true
+    ActsAsTaggable.force_parameterize = true
 
 
 ### Testing
@@ -59,7 +59,8 @@ Acts As Taggable uses RSpec for its test coverage
     User.skill_counts # => [<Tag name="joking" count=2>,<Tag name="clowning" count=1>...]
     @frankie.skill_counts
 ```
-=== Finding Tagged Objects
+
+### Finding Tagged Objects
 
 Acts As Taggable On utilizes named_scopes to create an association for tags.
 This way you can mix and match to filter down your results, and it also improves
@@ -87,7 +88,7 @@ compatibility with the will_paginate gem:
     User.tagged_with(['awesome, cool'], :on => :tags, :any => true).tagged_with(['smart', 'shy'], :on => :skills, :any => true)
 ```
 
-  You can also use :wild => true option along with :any or :exclude option. It will looking for %awesome% and %cool% in sql.
+  You can also use :wild => true option along with :any or :exclude option. It will looking for awesome and cool in sql.
 
   Tip: User.tagged_with([]) or '' will return [], but not all records.
 
@@ -96,6 +97,7 @@ compatibility with the will_paginate gem:
 You can find objects of the same type based on similar tags on certain contexts.
 Also, objects will be returned in descending order based on the total number of
 matched tags.
+
 
 ```ruby
     @bobby = User.find_by_name("Bobby")
@@ -116,6 +118,7 @@ matched tags.
 
 In addition to the generated tag contexts in the definition, it is also possible
 to allow for dynamic tag contexts (this could be user generated tag contexts!)
+
 
 ```ruby
     @user = User.new(:name => "Bobby")
@@ -163,17 +166,17 @@ Tags can have owners:
     @boddy.skill_list_changed? #=> true
 
     @bobby.skill_list_change.should == ["jogging, diving", ["swimming"]]
-```ruby
+```
 
 ### Tag cloud calculations
 
 To construct tag clouds, the frequency of each tag needs to be calculated.
-Because we specified +acts_as_taggable_on+ on the <tt>User</tt> class, we can
-get a calculation of all the tag counts by using <tt>User.tag_counts_on(:customs)</tt>. But what if we wanted a tag count for
+Because we specified +acts_as_taggable_on+ on the User class, we can
+get a calculation of all the tag counts by using User.tag_counts_on(:customs). But what if we wanted a tag count for
 an single user's posts? To achieve this we call tag_counts on the association:
 
 ```ruby
-  User.find(:first).posts.tag_counts_on(:tags)
+    User.find(:first).posts.tag_counts_on(:tags)
 ```
 
 A helper is included to assist with generating tag clouds.
@@ -204,9 +207,10 @@ View:
   <% tag_cloud(@tags, %w(css1 css2 css3 css4)) do |tag, css_class| %>
     <%= link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
   <% end %>
-```ruby
+```
 
 CSS:
+
 ```ruby
   .css1 { font-size: 1.0em; }
   .css2 { font-size: 1.2em; }
@@ -218,7 +222,7 @@ CSS:
 ## Credits
 * Michael Bleigh, author of the original acts_as_taggable
 * Artem Kramarenko (artemk)
-* {From the original project}[https://github.com/mbleigh/acts-as-taggable-on/contributors]
+* [From the original project](https://github.com/mbleigh/acts-as-taggable-on/contributors)
 
 
 
