@@ -1,47 +1,47 @@
-= ActsAsTaggable
-{<img src="https://secure.travis-ci.org/mbleigh/acts-as-taggable-on.png" />}[http://travis-ci.org/mbleigh/acts-as-taggable-on]
+# ActsAsTaggable
 
-This plugin was originally based on Acts as Taggable on Steroids by Jonathan Viney.
-It has evolved substantially since that point, but all credit goes to him for the
-initial tagging functionality that so many people have used.
+### General information
 
-For instance, in a social network, a user might have tags that are called skills,
-interests, sports, and more. There is no real way to differentiate between tags and
-so an implementation of this type is not possible with acts as taggable on steroids.
+Adds functionality tags to models.
 
-Enter Acts as Taggable On. Rather than tying functionality to a specific keyword
-(namely "tags"), acts as taggable on allows you to specify an arbitrary number of
-tag "contexts" that can be used locally or in combination in the same way steroids
-was used.
-
-== Installation
-
-=== Rails 2.x
-
-Not supported any more! It is time for update guys.
-
-=== Rails 3.x
+## Installation
 
 To use it, add it to your Gemfile:
 
-  gem 'acts-as-taggable-on', '~> 2.2.2'
+    gem 'acts_as_taggable', :git => 'git@github.com:ivoreis/acts_as_taggable.git'
 
-==== Post Installation
+### Post Installation
 
-1. rails generate acts_as_taggable_on:migration
+1. rails generate acts_as_taggable:migration
 2. rake db:migrate
 
-== Testing
 
-Acts As Taggable On uses RSpec for its test coverage. Inside the gem
-directory, you can run the specs for RoR 3.x with:
+### Configuration
 
-  rake spec
+If you would like to remove unused tag objects after removing taggings, add
 
-== Usage
+  ActsAsTaggable.remove_unused_tags = true
 
+If you want force tags to be saved downcased:
+
+  ActsAsTaggable.force_lowercase = true
+
+If you want tags to be saved parametrized (you can redefine to_param as well):
+
+  ActsAsTaggable.force_parameterize = true
+
+
+### Testing
+
+Acts As Taggable uses RSpec for its test coverage
+
+    rake spec
+
+## Usage
+
+```ruby
     class User < ActiveRecord::Base
-      # Alias for <tt>acts_as_taggable_on :tags</tt>:
+      # Alias for acts_as_taggable_on :tags
       acts_as_taggable
       acts_as_taggable_on :skills, :interests
     end
@@ -58,13 +58,14 @@ directory, you can run the specs for RoR 3.x with:
     @frankie = User.create(:name => "Frankie", :skill_list => "joking, flying, eating")
     User.skill_counts # => [<Tag name="joking" count=2>,<Tag name="clowning" count=1>...]
     @frankie.skill_counts
-
+```
 === Finding Tagged Objects
 
 Acts As Taggable On utilizes named_scopes to create an association for tags.
 This way you can mix and match to filter down your results, and it also improves
 compatibility with the will_paginate gem:
 
+```ruby
     class User < ActiveRecord::Base
       acts_as_taggable_on :tags, :skills
       scope :by_join_date, order("created_at DESC")
@@ -84,17 +85,19 @@ compatibility with the will_paginate gem:
 
     # Find a user with any of tags based on context:
     User.tagged_with(['awesome, cool'], :on => :tags, :any => true).tagged_with(['smart', 'shy'], :on => :skills, :any => true)
+```
 
   You can also use :wild => true option along with :any or :exclude option. It will looking for %awesome% and %cool% in sql.
 
   Tip: User.tagged_with([]) or '' will return [], but not all records.
 
-=== Relationships
+### Relationships
 
 You can find objects of the same type based on similar tags on certain contexts.
 Also, objects will be returned in descending order based on the total number of
 matched tags.
 
+```ruby
     @bobby = User.find_by_name("Bobby")
     @bobby.skill_list # => ["jogging", "diving"]
 
@@ -107,12 +110,14 @@ matched tags.
     @tom.find_related_skills # => [<User name="Bobby">,<User name="Frankie">]
     @bobby.find_related_skills # => [<User name="Tom">]
     @frankie.find_related_skills # => [<User name="Tom">]
+```
 
-=== Dynamic Tag Contexts
+### Dynamic Tag Contexts
 
 In addition to the generated tag contexts in the definition, it is also possible
 to allow for dynamic tag contexts (this could be user generated tag contexts!)
 
+```ruby
     @user = User.new(:name => "Bobby")
     @user.set_tag_list_on(:customs, "same, as, tag, list")
     @user.tag_list_on(:customs) # => ["same","as","tag","list"]
@@ -120,11 +125,13 @@ to allow for dynamic tag contexts (this could be user generated tag contexts!)
     @user.tags_on(:customs) # => [<Tag name='same'>,...]
     @user.tag_counts_on(:customs)
     User.tagged_with("same", :on => :customs) # => [@user]
+```
 
-=== Tag Ownership
+### Tag Ownership
 
 Tags can have owners:
 
+```ruby
     class User < ActiveRecord::Base
       acts_as_tagger
     end
@@ -140,9 +147,11 @@ Tags can have owners:
     @some_photo.owner_tags_on(@some_user, :locations) # => [#<ActsAsTaggable::Tag id: 1, name: "paris">...]
     @some_photo.owner_tags_on(nil, :locations) # => Ownerships equivalent to saying @some_photo.locations
     @some_user.tag(@some_photo, :with => "paris, normandy", :on => :locations, :skip_save => true) #won't save @some_photo object
+```
 
-=== Dirty objects
+### Dirty objects
 
+```ruby
     @bobby = User.find_by_name("Bobby")
     @bobby.skill_list # => ["jogging", "diving"]
 
@@ -154,15 +163,18 @@ Tags can have owners:
     @boddy.skill_list_changed? #=> true
 
     @bobby.skill_list_change.should == ["jogging, diving", ["swimming"]]
+```ruby
 
-=== Tag cloud calculations
+### Tag cloud calculations
 
 To construct tag clouds, the frequency of each tag needs to be calculated.
 Because we specified +acts_as_taggable_on+ on the <tt>User</tt> class, we can
 get a calculation of all the tag counts by using <tt>User.tag_counts_on(:customs)</tt>. But what if we wanted a tag count for
 an single user's posts? To achieve this we call tag_counts on the association:
 
+```ruby
   User.find(:first).posts.tag_counts_on(:tags)
+```
 
 A helper is included to assist with generating tag clouds.
 
@@ -170,56 +182,45 @@ Here is an example that generates a tag cloud.
 
 Helper:
 
+```ruby
   module PostsHelper
     include ActsAsTaggable::TagsHelper
   end
+```
 
 Controller:
 
+```ruby
   class PostController < ApplicationController
     def tag_cloud
       @tags = Post.tag_counts_on(:tags)
     end
   end
+```
 
 View:
 
+```ruby
   <% tag_cloud(@tags, %w(css1 css2 css3 css4)) do |tag, css_class| %>
     <%= link_to tag.name, { :action => :tag, :id => tag.name }, :class => css_class %>
   <% end %>
+```ruby
 
 CSS:
-
+```ruby
   .css1 { font-size: 1.0em; }
   .css2 { font-size: 1.2em; }
   .css3 { font-size: 1.4em; }
   .css4 { font-size: 1.6em; }
-
-== Configuration
-
-If you would like to remove unused tag objects after removing taggings, add
-
-  ActsAsTaggable.remove_unused_tags = true
-
-If you want force tags to be saved downcased:
-
-  ActsAsTaggable.force_lowercase = true
-
-If you want tags to be saved parametrized (you can redefine to_param as well):
-
-  ActsAsTaggable.force_parameterize = true
+```
 
 
-== Contributors
-
-We have a long list of valued contributors. {Check them all}[https://github.com/mbleigh/acts-as-taggable-on/contributors]
-
-== Maintainers
-
+## Credits
+* Michael Bleigh, author of the original acts_as_taggable
 * Artem Kramarenko (artemk)
+* {From the original project}[https://github.com/mbleigh/acts-as-taggable-on/contributors]
 
-== Author
 
-* Michael Bleigh
 
-Copyright (c) 2007-2011 Michael Bleigh (http://mbleigh.com/) and Intridea Inc. (http://intridea.com/), released under the MIT license
+## License
+Copyright (c) 2012 Michael Bleigh (http://mbleigh.com/) and Intridea Inc. (http://intridea.com/), Ivo Reis, released under the MIT license

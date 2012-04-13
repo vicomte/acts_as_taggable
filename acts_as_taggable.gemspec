@@ -12,7 +12,6 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'rails'
   gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'ammeter'
   gem.add_development_dependency 'sqlite3'
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
