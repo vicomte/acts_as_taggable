@@ -2,7 +2,7 @@ require 'rails/generators'
 require 'rails/generators/migration'
 
 module ActsAsTaggable
-  class MigrationGenerator < Rails::Generators::Base
+  class InstallGenerator < Rails::Generators::Base
     include Rails::Generators::Migration
 
     desc "Generates migration for Tag and Tagging models"
@@ -31,7 +31,7 @@ module ActsAsTaggable
 
     def create_migration_file
       if self.class.orm_has_migration?
-        migration_template 'migration.rb', 'db/migrate/acts_as_taggable_migration'
+        migration_template 'migration.rb', 'db/migrate/create_taggables'
       end
     end
   end

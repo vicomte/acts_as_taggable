@@ -8,11 +8,11 @@ Adds functionality tags to models.
 
 To use it, add it to your Gemfile:
 
-    gem 'acts_as_taggable', :git => 'git@github.com:ivoreis/acts_as_taggable.git'
+    gem 'acts_as_taggable', :git => 'git://github.com/ivoreis/acts_as_taggable.git'
 
 ### Post Installation
 
-1. rails generate acts_as_taggable:migration
+1. rails g acts_as_taggable:install
 2. rake db:migrate
 
 
