@@ -13,7 +13,6 @@ module ActsAsTaggable
 
     module ClassMethods
       def initialize_acts_as_taggable_on_core
-        logger.info self.tag_types
         self.tag_types.map(&:to_s).each do |types|
           type         = types.to_s.singularize
           context_taggings = "#{type}_taggings".to_sym

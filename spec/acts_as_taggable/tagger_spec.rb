@@ -99,7 +99,7 @@ describe "Tagger" do
   end
 
   it "is tagger" do
-    @user.is_tagger?.should(be_true)
+    @user.should be_tagger
   end
 
   it "should skip save if skip_save is passed as option" do

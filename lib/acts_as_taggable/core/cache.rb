@@ -1,6 +1,6 @@
-module ActsAsTaggable
-  module Core
-    module Cache
+module ActsAsTaggable #:nodoc:
+  module Core #:nodoc:
+    module Cache  #:nodoc:
       extend ActiveSupport::Concern
 
       included do

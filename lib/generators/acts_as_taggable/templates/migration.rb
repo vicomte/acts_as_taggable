@@ -1,22 +1,15 @@
 class CreateTaggables < ActiveRecord::Migration
   def self.up
-    create_table :tags do |t|
-      t.string :name
+    create_table :tags, :force => true do |t|
+      t.string :name, :null => false
     end
 
-    create_table :taggings do |t|
-      t.references :tag
-
-      # You should make sure that the column created is
-      # long enough to store the required class names.
-      t.references :taggable, :polymorphic => true
-      t.references :tagger, :polymorphic => true
-
-      # limit is created to prevent mysql error o index lenght for myisam table type.
-      # http://bit.ly/vgW2Ql
+    create_table :taggings, :force => true do |t|
+      t.belongs_to :tag, :null => false
+      t.belongs_to :taggable, :polymorphic => true, :null => false
+      t.belongs_to :tagger, :polymorphic => true, :null => false
       t.string :context, :limit => 128
-
-      t.datetime :created_at
+      t.timestamps
     end
 
     add_index :taggings, :tag_id
@@ -27,5 +20,8 @@ class CreateTaggables < ActiveRecord::Migration
   def self.down
     drop_table :taggings
     drop_table :tags
+    remove_index :taggings, :tag_id
+    remove_index :taggings, [:tagger_id, :tagger_type]
+    remove_index :taggings, [:taggable_id, :taggable_type, :context]
   end
 end

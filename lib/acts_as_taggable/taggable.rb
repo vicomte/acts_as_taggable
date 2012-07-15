@@ -63,9 +63,9 @@ module ActsAsTaggable
       # Make a model taggable on specified contexts
       # and optionally preserves the order in which tags are created
       #
-      # Seperate methods used above for backwards compatibility
+      # Separate methods used above for backwards compatibility
       # so that the original acts_as_taggable method is unaffected
-      # as it's not possible to add another arguement to the method
+      # as it's not possible to add another argument to the method
       # without the tag_types being enclosed in square brackets
       #
       # NB: method overridden in core module in order to create tag type

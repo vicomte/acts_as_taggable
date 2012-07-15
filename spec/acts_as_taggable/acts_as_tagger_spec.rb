@@ -11,19 +11,19 @@ describe "acts_as_tagger" do
     end
 
     it "should add #is_tagger? query method to the class-side" do
-      TaggableUser.should respond_to(:is_tagger?)
+      TaggableUser.should respond_to(:tagger?)
     end
     
     it "should return true from the class-side #is_tagger?" do
-      TaggableUser.is_tagger?.should be_true
+      TaggableUser.should be_tagger
     end
     
     it "should return false from the base #is_tagger?" do
-      ActiveRecord::Base.is_tagger?.should be_false
+      ActiveRecord::Base.should_not be_tagger
     end
     
     it "should add #is_tagger? query method to the singleton" do
-      @tagger.should respond_to(:is_tagger?)
+      @tagger.should respond_to(:tagger?)
     end
     
     it "should add #tag method on the instance-side" do

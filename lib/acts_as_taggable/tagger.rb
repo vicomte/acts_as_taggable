@@ -4,7 +4,7 @@ module ActsAsTaggable
 
     module ClassMethods
 
-      def is_tagger?
+      def tagger?
         false
       end
 
@@ -22,9 +22,13 @@ module ActsAsTaggable
         has_many :owned_tags, :through => :owned_taggings, :source => :tag, :uniq => true, :class_name => "ActsAsTaggable::Tag"
 
         class_eval do
-          def self.is_tagger?
+          def tagger?
             true
           end
+        end
+
+        def self.tagger?
+          true
         end
       end
     end
@@ -50,10 +54,6 @@ module ActsAsTaggable
 
       taggable.set_owner_tag_list_on(self, opts[:on].to_s, opts[:with])
       taggable.save unless skip_save
-    end
-
-    def is_tagger?
-      self.class.is_tagger?
     end
   end
 end
